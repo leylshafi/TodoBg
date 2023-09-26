@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using TodoWebService.Auth;
+using TodoWebService.BackgroundServices;
 using TodoWebService.Data;
 using TodoWebService.Models.Entities;
 using TodoWebService.Providers;
@@ -97,6 +98,8 @@ namespace TodoWebService
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
             services.AddScoped<ITodoService, TodoService>();
+            services.AddScoped<IEmailService, SmtpEmailService>();
+            services.AddHostedService<TodoNotificationService>();
             return services;
         }
     }

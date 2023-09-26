@@ -7,6 +7,6 @@
         public string Email { get; set; }
         public bool IsCompleted { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
-        public int ScheduledMinutes { get; set; }
+        public DateTimeOffset EndDate { get; set; }
     }
 }

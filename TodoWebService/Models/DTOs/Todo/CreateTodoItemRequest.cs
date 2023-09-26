@@ -8,7 +8,8 @@ namespace TodoWebService.Models.DTOs.Todo
         [MinLength(5)]
         public string Text { get; set; } = string.Empty;
 
-        public int ScheduledMinutes { get; set; }
+        [Required]
+        public DateTimeOffset? EndDate { get; set; }
 
     }
 }

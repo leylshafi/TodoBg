@@ -12,7 +12,7 @@ namespace TodoWebService.Services
             _configuration = configuration;
         }
 
-        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        public  void SendEmail(string toEmail, string subject, string body)
         {
             var smtpSettings = _configuration.GetSection("SmtpSettings");
 
@@ -37,7 +37,7 @@ namespace TodoWebService.Services
 
             message.To.Add(toEmail);
 
-            await smtpClient.SendMailAsync(message);
+            smtpClient.Send(message);
         }
     }
 }

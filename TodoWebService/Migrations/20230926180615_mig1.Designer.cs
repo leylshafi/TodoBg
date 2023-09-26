@@ -9,10 +9,10 @@ using TodoWebService.Data;
 
 #nullable disable
 
-namespace TodoWebService.Migrations
+namespace TodoWebServiceBg.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20230920122338_mig1")]
+    [Migration("20230926180615_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -234,6 +234,9 @@ namespace TodoWebService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AlreadyAlerted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTimeOffset>("CreatedTime")
                         .HasColumnType("datetimeoffset");
 
@@ -241,11 +244,11 @@ namespace TodoWebService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset>("EndTime")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
-
-                    b.Property<int>("ScheduledMinutes")
-                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()

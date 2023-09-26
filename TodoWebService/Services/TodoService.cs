@@ -49,7 +49,7 @@ namespace TodoWebService.Services
                 UpdatedTime = now,
                 IsCompleted = false,
                 UserId = userId,
-                ScheduledMinutes= request.ScheduledMinutes,
+                EndTime = request.EndDate.Value,
             };
             item = _context.TodoItems.Add(item).Entity;
             await _context.SaveChangesAsync();

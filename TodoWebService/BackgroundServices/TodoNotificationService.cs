@@ -1,45 +1,60 @@
 ﻿
+
+using NETCore.MailKit.Core;
 using TodoWebService.Data;
 using TodoWebService.Models.Entities;
 using TodoWebService.Services;
+using IEmailService = TodoWebService.Services.IEmailService;
 
 namespace TodoWebService.BackgroundServices
 {
-    public class TodoNotificationService : BackgroundService
+    public class TodoNotificationService : IHostedService
     {
-        private readonly IServiceProvider _serviceProvider;
-        public TodoNotificationService(IServiceProvider serviceProvider)
+        private Timer? _timer;
+        private readonly IEmailService? _mailService;
+        private readonly IServiceProvider _provider;
+        public TodoNotificationService(IServiceProvider provider)
         {
-            _serviceProvider = serviceProvider;
+            _provider = provider;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        private void Run(object? state)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            using var scope = _provider.CreateScope();
+            var _todoDbContext = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
+            var _mailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+            var todoitems = _todoDbContext.TodoItems.ToList();
+            foreach (var todoitem in todoitems)
             {
-                using (var scope = _serviceProvider.CreateScope())
+                if (todoitem.EndTime.Subtract(DateTime.Today) < TimeSpan.FromDays(1) && !todoitem.AlreadyAlerted)
                 {
-                    var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
-                    var context = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
-                    var allTodos = context.TodoItems.ToList();
+                    string userEmail = todoitem.Email;
+                    string subject = "Overdue To-Do Item";
+                    string message = $"Your to-do item '{todoitem.Text}' is overdue.";
 
-                    var currentTime = DateTime.Now;
-                    var overdueTodos = allTodos.Where(todo => todo.ScheduledMinutes < currentTime.Minute - todo.CreatedTime.Minute).ToList();
-
-                    foreach (var todo in overdueTodos)
-                    {
-                        string userEmail = todo.Email; 
-                        string subject = "Overdue To-Do Item";
-                        string message = $"Your to-do item '{todo.Text}' is overdue.";
-
-                        await emailService.SendEmailAsync(userEmail, subject, message);
-                    }
+                    _mailService.SendEmail(userEmail, subject, message);
+                    todoitem.AlreadyAlerted = true;
+                    _todoDbContext.Update(todoitem);
                 }
-
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken); // Check every 10 minutes
             }
+            _todoDbContext.SaveChanges();
         }
 
-        
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            Console.WriteLine("Background Service started ....");
+            _timer = new Timer(Run, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            Console.WriteLine("Background Service stopped ....");
+            _timer?.Change(Timeout.Infinite, 0);
+            return Task.CompletedTask;
+        }
     }
+
+
 }
+

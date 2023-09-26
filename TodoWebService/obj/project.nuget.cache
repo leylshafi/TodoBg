@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AWVOpU+WV0LqdycWVY2tT8WL+ovPqkFKYgO6LMl+lfdQmsSKT4AQ2dQo5mVyTwMBa/Wz4fPzTydoRAIQG9Zgig==",
+  "dgSpecHash": "AYj86eTyIqfgV6kBMuziigYhY7a/3dhWP0R5CAMNEBoDqdVRAE9hTg++0G11wAchXqCb47piFbalEr5sTGJcvg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ACER\\Desktop\\TodoWebServiceLogCopy\\TodoWebService\\TodoWebServiceBg.csproj",
+  "projectFilePath": "C:\\Users\\ACER\\Source\\Repos\\TodoBg\\TodoWebService\\TodoWebServiceBg.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ACER\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
