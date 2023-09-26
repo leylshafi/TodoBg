@@ -1,10 +1,6 @@
-﻿
-
-using NETCore.MailKit.Core;
-using TodoWebService.Data;
-using TodoWebService.Models.Entities;
+﻿using TodoWebService.Data;
 using TodoWebService.Services;
-using IEmailService = TodoWebService.Services.IEmailService;
+
 
 namespace TodoWebService.BackgroundServices
 {

@@ -10,20 +10,15 @@ using TodoWebService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
+builder.Services.AddDomainServices();
 
-var configuration = new ConfigurationBuilder()
-			.AddJsonFile("appsettings.json")
-			.Build();
+//builder.Services.AddLogging(c => c.AddJsonConsole());
 
-Log.Logger = new LoggerConfiguration()
-	.ReadFrom.Configuration(configuration)
-	.CreateLogger();
+
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IEmailService, SmtpEmailService>();
-builder.Services.AddHostedService<TodoNotificationService>();
 
 builder.Services.AddDbContext<TodoDbContext>(options =>
 {

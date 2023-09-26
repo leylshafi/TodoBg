@@ -47,9 +47,9 @@ namespace TodoWebService.Services
                 Text = request.Text,
                 CreatedTime = now,
                 UpdatedTime = now,
-                IsCompleted = false,
-                UserId = userId,
                 EndTime = request.EndDate.Value,
+                IsCompleted = false,
+                UserId = user.Id
             };
             item = _context.TodoItems.Add(item).Entity;
             await _context.SaveChangesAsync();
